@@ -11,7 +11,8 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("alive")
+        print("alive lmao")
+        
         // Do any additional setup after loading the view.
     }
 
