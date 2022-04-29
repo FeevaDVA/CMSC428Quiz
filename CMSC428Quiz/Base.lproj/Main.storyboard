@@ -40,6 +40,9 @@
                                     <segment title="Multi"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" red="0.0" green="0.8782373411114861" blue="1" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
+                                <connections>
+                                    <action selector="segment" destination="BYZ-38-t0r" eventType="valueChanged" id="XKk-JF-gjC"/>
+                                </connections>
                             </segmentedControl>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="150" preservesSuperviewLayoutMargins="YES" image="person" translatesAutoresizingMaskIntoConstraints="NO" id="vGi-ks-OLm">
                                 <rect key="frame" x="52" y="237" width="101" height="152"/>
@@ -67,6 +70,9 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Start" cornerStyle="dynamic">
                                     <color key="baseForegroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="start" destination="BYZ-38-t0r" eventType="touchUpInside" id="Pwd-oy-Bog"/>
+                                </connections>
                             </button>
                             <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fo1-54-UtF">
                                 <rect key="frame" x="132" y="510" width="150" height="34"/>
@@ -79,6 +85,9 @@
                                 <buttonConfiguration key="configuration" style="filled" title="Connect">
                                     <color key="baseForegroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="connect" destination="BYZ-38-t0r" eventType="touchUpInside" id="ET3-bR-kXu"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -104,6 +113,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9yK-z3-lFT"/>
+                    <connections>
+                        <outlet property="connectButton" destination="Fo1-54-UtF" id="Dtl-aR-49w"/>
+                        <outlet property="multiBar" destination="jGd-jy-cYN" id="eNk-G4-0lL"/>
+                        <outlet property="startButton" destination="9rN-f5-QQl" id="yPG-FZ-Bew"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
