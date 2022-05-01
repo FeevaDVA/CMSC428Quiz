@@ -48,7 +48,23 @@ class ViewController: UIViewController{
     }
     
     @IBAction func start(){
-        print("start")
+        print("start pushed")
+        if(multi == 0){
+            performSegue(withIdentifier: "quiz", sender: nil)
+        } else {
+            if !session.connectedPeers.isEmpty {
+                do {
+                    if(session.connectedPeers.count > 4){
+                        return
+                    }
+                    let data = "quiz"
+                    try session.send(data.data(using: String.Encoding.ascii, allowLossyConversion: true)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable)
+                    performSegue(withIdentifier: "quiz", sender: nil)
+                } catch {
+                    print("error")
+                }
+            }
+        }
     }
     
     @IBAction func segment(){
@@ -63,10 +79,6 @@ class ViewController: UIViewController{
                 print("default")
         }
         print(multi)
-    }
-    
-    func joinSession(){
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -99,7 +111,17 @@ extension ViewController: MCSessionDelegate {
         }
     }
     
-    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {}
+    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+        if let string = String(data: data, encoding: String.Encoding.ascii){
+            print(string)
+            if(string == "quiz"){
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "quiz", sender: nil)
+                }
+            }
+        }
+            
+    }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}
 
