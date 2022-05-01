@@ -82,7 +82,10 @@ class ViewController: UIViewController{
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        if(segue.identifier == "quiz"){
+            let vc = segue.destination as? QuizViewController
+            vc?.session = session
+        }
     }
 }
 
