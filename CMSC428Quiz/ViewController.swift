@@ -109,9 +109,19 @@ extension ViewController: MCSessionDelegate {
 }
 
 extension ViewController: MCNearbyServiceAdvertiserDelegate{
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        print("got invite from " + peerID.displayName)
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerId: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        print("got invite from " + peerId.displayName)
+        let inviteAlert = UIAlertController(title: "Invite", message:"invite from " + peerId.displayName, preferredStyle: UIAlertController.Style.alert)
+
+        inviteAlert.addAction(UIAlertAction(title: "Decline", style: .default, handler: { [self] (action: UIAlertAction!) in
+        invitationHandler(false, session)
+          }))
+
+        inviteAlert.addAction(UIAlertAction(title: "Accept", style: .cancel, handler: { [self] (action: UIAlertAction!) in
         invitationHandler(true, session)
+          }))
+
+        present(inviteAlert, animated: true, completion: nil)
     }
 }
 
