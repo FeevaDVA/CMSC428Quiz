@@ -28,16 +28,24 @@ struct Answers:Decodable{
     let D: String
 }
 
+struct Player{
+    let peerID:MCPeerID
+    var selectedAnswer:String = ""
+    var points:Int = 0
+}
+
 class QuizViewController: UIViewController {
     var session:MCSession!
     var multi:Int!
-    var players:Int!
     var curQuiz:Quiz!
     var curQ:Int = 0
     var timer:Timer!
     var d:Data!
     var curAnswer:String!
     var selectedAnswer:String = ""
+    var players:[Player] = []
+    var imagePlayers:[UIImageView] = []
+    var quizNum:Int = 1
     
     
     @IBOutlet weak var answerA:UIButton!
@@ -53,16 +61,37 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var points3:UILabel!
     @IBOutlet weak var points4:UILabel!
     
+    @IBOutlet weak var player1:UIImageView!
+    @IBOutlet weak var player2:UIImageView!
+    @IBOutlet weak var player3:UIImageView!
+    @IBOutlet weak var player4:UIImageView!
+    
     @IBOutlet weak var time:UILabel!
     @IBOutlet weak var restartButton:UIButton!
     
     
     override func viewDidLoad() {
+        imagePlayers.append(player1)
+        
         if(multi == 1){
+            imagePlayers.append(player2)
+            imagePlayers.append(player3)
+            imagePlayers.append(player4)
+            
             session.delegate = self
-            players = session.connectedPeers.count
+            var i = 0
+            while(i<session.connectedPeers.count){
+                let id = session.connectedPeers[i]
+                let p:Player = Player(peerID: id)
+                players.append(p)
+                i += 1
+            }
+            print(players)
+        } else {
+            let player = Player(peerID: session.myPeerID)
+            players.append(player)
         }
-        if let url = URL(string: "https://www.people.vcu.edu/~ebulut/jsonFiles/quiz1.json") {
+        if let url = URL(string: "https://www.people.vcu.edu/~ebulut/jsonFiles/quiz" + String(quizNum) + ".json") {
            URLSession.shared.dataTask(with: url) { data, response, error in
               if let data = data {
                  if let jsonString = String(data: data, encoding: .utf8) {
@@ -89,11 +118,12 @@ class QuizViewController: UIViewController {
     func startQuiz(){
         curQ = 0
         getQuestion()
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.lowerTime), userInfo: nil, repeats: true)
     }
     
-    func getQuestion(){
+    @objc func getQuestion(){
         let q:Questions = curQuiz.questions[curQ]
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.lowerTime), userInfo: nil, repeats: true)
         
         selectedAnswer = ""
         
@@ -119,7 +149,7 @@ class QuizViewController: UIViewController {
             if(curQ >= curQuiz.numberOfQuestions){
                 endQuiz()
             } else {
-                getQuestion()
+                calcPoints()
             }
         } else {
             time.text = String(Int(time.text!)! - 1)
@@ -127,35 +157,72 @@ class QuizViewController: UIViewController {
     }
     
     func endQuiz(){
+        timer.invalidate()
+        let q:Questions = curQuiz.questions[curQ - 1]
+        var i = 0
+        while(i<players.count){
+            if(players[i].selectedAnswer == q.correctOption){
+                players[i].points += 1
+                players[i].selectedAnswer = ""
+            }
+            i += 1
+        }
+        print(q.correctOption)
+        switch q.correctOption {
+            case "A": answerA.backgroundColor = .green
+            case "B": answerB.backgroundColor = .green
+            case "C": answerC.backgroundColor = .green
+            case "D": answerD.backgroundColor = .green
+            default: print("")
+        }
+        quizNum += 1
         print("quiz ended")
     }
     
-    func nextQuestion(){
-        
+    func calcPoints(){
+        timer.invalidate()
+        let q:Questions = curQuiz.questions[curQ - 1]
+        let time = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.getQuestion), userInfo: nil, repeats: false)
+        var i = 0
+        while(i<players.count){
+            if(players[i].selectedAnswer == q.correctOption){
+                players[i].points += 1
+                players[i].selectedAnswer = ""
+            }
+            i += 1
+        }
+        print(q.correctOption)
+        switch q.correctOption {
+            case "A": answerA.backgroundColor = .green
+            case "B": answerB.backgroundColor = .green
+            case "C": answerC.backgroundColor = .green
+            case "D": answerD.backgroundColor = .green
+            default: print("")
+        }
     }
     
     @IBAction func selectAnswer(_ sender: UIButton){
         if(sender.tag == 1){
             answerA.backgroundColor = .blue
-            selectedAnswer = "A"
+            players[0].selectedAnswer = "A"
             answerB.backgroundColor = .lightGray
             answerC.backgroundColor = .lightGray
             answerD.backgroundColor = .lightGray
         } else if(sender.tag == 2){
             answerB.backgroundColor = .blue
-            selectedAnswer = "B"
+            players[0].selectedAnswer = "B"
             answerA.backgroundColor = .lightGray
             answerC.backgroundColor = .lightGray
             answerD.backgroundColor = .lightGray
         } else if(sender.tag == 3){
             answerC.backgroundColor = .blue
-            selectedAnswer = "C"
+            players[0].selectedAnswer = "C"
             answerA.backgroundColor = .lightGray
             answerB.backgroundColor = .lightGray
             answerD.backgroundColor = .lightGray
         } else if(sender.tag == 4){
             answerD.backgroundColor = .blue
-            selectedAnswer = "D"
+            players[0].selectedAnswer = "D"
             answerB.backgroundColor = .lightGray
             answerC.backgroundColor = .lightGray
             answerA.backgroundColor = .lightGray
