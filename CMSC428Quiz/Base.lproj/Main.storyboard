@@ -45,16 +45,16 @@
                                 </connections>
                             </segmentedControl>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="150" preservesSuperviewLayoutMargins="YES" image="person" translatesAutoresizingMaskIntoConstraints="NO" id="vGi-ks-OLm">
-                                <rect key="frame" x="52" y="218.5" width="101" height="101.5"/>
+                                <rect key="frame" x="52" y="219" width="101" height="101"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="101" id="0s3-RZ-kTS"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="150" placeholderIntrinsicHeight="150" preservesSuperviewLayoutMargins="YES" image="group" translatesAutoresizingMaskIntoConstraints="NO" id="puA-nc-xWM">
-                                <rect key="frame" x="222" y="218.5" width="101" height="101.5"/>
+                                <rect key="frame" x="222" y="219" width="101" height="101"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Quiz Game" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gk5-Ea-W6A">
-                                <rect key="frame" x="23" y="82" width="323" height="78.5"/>
+                                <rect key="frame" x="23" y="82" width="323" height="79"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="52"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -139,13 +139,13 @@
                                 </constraints>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="A. "/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kH8-pW-wEr">
                                 <rect key="frame" x="16" y="369" width="150" height="30"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="C. "/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="119" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fuJ-eS-yR6">
                                 <rect key="frame" x="16" y="236" width="343" height="87"/>
@@ -167,13 +167,13 @@
                                 <rect key="frame" x="209" y="369" width="150" height="30"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="D."/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJc-ya-29Q">
                                 <rect key="frame" x="209" y="331" width="150" height="30"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="B. "/>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jzc-4A-Rda"/>

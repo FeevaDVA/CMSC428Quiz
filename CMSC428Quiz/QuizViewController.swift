@@ -68,22 +68,29 @@ class QuizViewController: UIViewController {
                }
            }.resume()
         }
-        
-        
+        while(curQuiz == nil){
+            
+        }
+        startQuiz()
     }
     
     func parseJson(data:Data){
         let quiz:Quiz = try! JSONDecoder().decode(Quiz.self, from: data)
         curQuiz = quiz
         curQ = 0
-        startQuiz()
         print(quiz)
     }
     
     func startQuiz(){
         let q:Questions = curQuiz.questions[curQ]
         
+        answerA.setTitle("A. " + q.options.A, for: .normal)
+        answerB.setTitle("B. " + q.options.B, for: .normal)
+        answerC.setTitle("C. " + q.options.C, for: .normal)
+        answerD.setTitle("D. " + q.options.D, for: .normal)
         
+        question.text = q.questionSentence
+        questionAmount.text = String(q.number) + "/" + String(curQuiz.questions.count)
         
     }
     
