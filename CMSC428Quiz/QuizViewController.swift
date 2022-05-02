@@ -72,7 +72,7 @@ class QuizViewController: UIViewController {
     
     override func viewDidLoad() {
         imagePlayers.append(player1)
-        
+        //if multi add other players and stuff
         if(multi == 1){
             imagePlayers.append(player2)
             imagePlayers.append(player3)
@@ -91,6 +91,7 @@ class QuizViewController: UIViewController {
             let player = Player(peerID: session.myPeerID)
             players.append(player)
         }
+        //gets the json from url
         if let url = URL(string: "https://www.people.vcu.edu/~ebulut/jsonFiles/quiz" + String(quizNum) + ".json") {
            URLSession.shared.dataTask(with: url) { data, response, error in
               if let data = data {
@@ -102,12 +103,14 @@ class QuizViewController: UIViewController {
                }
            }.resume()
         }
+        //waits for function to get json
         while(curQuiz == nil){
             
         }
+        //starts the quiz
         startQuiz()
     }
-    
+    //parses the json
     func parseJson(data:Data){
         let quiz:Quiz = try! JSONDecoder().decode(Quiz.self, from: data)
         curQuiz = quiz
@@ -115,11 +118,13 @@ class QuizViewController: UIViewController {
         print(quiz)
     }
     
+    //starts the quiz 
     func startQuiz(){
         curQ = 0
         getQuestion()
     }
     
+    //gets the current question and displays it also adds the timer
     @objc func getQuestion(){
         let q:Questions = curQuiz.questions[curQ]
         
@@ -142,7 +147,7 @@ class QuizViewController: UIViewController {
         question.text = q.questionSentence
         questionAmount.text = String(q.number) + "/" + String(curQuiz.questions.count)
     }
-    
+    //timer function
     @objc func lowerTime(){
         if(Int(time.text!) == 0){
             curQ += 1
@@ -155,7 +160,7 @@ class QuizViewController: UIViewController {
             time.text = String(Int(time.text!)! - 1)
         }
     }
-    
+    //the end of quiz function
     func endQuiz(){
         timer.invalidate()
         let q:Questions = curQuiz.questions[curQ - 1]
@@ -178,7 +183,7 @@ class QuizViewController: UIViewController {
         quizNum += 1
         print("quiz ended")
     }
-    
+    //point calculation function
     func calcPoints(){
         timer.invalidate()
         let q:Questions = curQuiz.questions[curQ - 1]
@@ -200,7 +205,7 @@ class QuizViewController: UIViewController {
             default: print("")
         }
     }
-    
+    //button action
     @IBAction func selectAnswer(_ sender: UIButton){
         if(sender.tag == 1){
             answerA.backgroundColor = .blue
@@ -229,6 +234,7 @@ class QuizViewController: UIViewController {
         }
     }
 }
+//session delegate need to handle recieving data ie receiving selected answer
 extension QuizViewController: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
