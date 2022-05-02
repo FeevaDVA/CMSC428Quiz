@@ -34,6 +34,10 @@ class QuizViewController: UIViewController {
     var players:Int!
     var curQuiz:Quiz!
     var curQ:Int = 0
+    var timer:Timer!
+    var d:Data!
+    var curAnswer:String!
+    var selectedAnswer:String = ""
     
     
     @IBOutlet weak var answerA:UIButton!
@@ -49,7 +53,7 @@ class QuizViewController: UIViewController {
     @IBOutlet weak var points3:UILabel!
     @IBOutlet weak var points4:UILabel!
     
-    @IBOutlet weak var timer:UILabel!
+    @IBOutlet weak var time:UILabel!
     @IBOutlet weak var restartButton:UIButton!
     
     
@@ -62,6 +66,7 @@ class QuizViewController: UIViewController {
            URLSession.shared.dataTask(with: url) { data, response, error in
               if let data = data {
                  if let jsonString = String(data: data, encoding: .utf8) {
+                     self.d = data
                      self.parseJson(data: data)
                      print(jsonString)
                  }
@@ -82,18 +87,80 @@ class QuizViewController: UIViewController {
     }
     
     func startQuiz(){
+        curQ = 0
+        getQuestion()
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.lowerTime), userInfo: nil, repeats: true)
+    }
+    
+    func getQuestion(){
         let q:Questions = curQuiz.questions[curQ]
+        
+        selectedAnswer = ""
+        
+        answerA.backgroundColor = .lightGray
+        answerB.backgroundColor = .lightGray
+        answerC.backgroundColor = .lightGray
+        answerD.backgroundColor = .lightGray
         
         answerA.setTitle("A. " + q.options.A, for: .normal)
         answerB.setTitle("B. " + q.options.B, for: .normal)
         answerC.setTitle("C. " + q.options.C, for: .normal)
         answerD.setTitle("D. " + q.options.D, for: .normal)
+        time.text = "30"
         
+        curAnswer = q.correctOption
         question.text = q.questionSentence
         questionAmount.text = String(q.number) + "/" + String(curQuiz.questions.count)
+    }
+    
+    @objc func lowerTime(){
+        if(Int(time.text!) == 0){
+            curQ += 1
+            if(curQ >= curQuiz.numberOfQuestions){
+                endQuiz()
+            } else {
+                getQuestion()
+            }
+        } else {
+            time.text = String(Int(time.text!)! - 1)
+        }
+    }
+    
+    func endQuiz(){
+        print("quiz ended")
+    }
+    
+    func nextQuestion(){
         
     }
     
+    @IBAction func selectAnswer(_ sender: UIButton){
+        if(sender.tag == 1){
+            answerA.backgroundColor = .blue
+            selectedAnswer = "A"
+            answerB.backgroundColor = .lightGray
+            answerC.backgroundColor = .lightGray
+            answerD.backgroundColor = .lightGray
+        } else if(sender.tag == 2){
+            answerB.backgroundColor = .blue
+            selectedAnswer = "B"
+            answerA.backgroundColor = .lightGray
+            answerC.backgroundColor = .lightGray
+            answerD.backgroundColor = .lightGray
+        } else if(sender.tag == 3){
+            answerC.backgroundColor = .blue
+            selectedAnswer = "C"
+            answerA.backgroundColor = .lightGray
+            answerB.backgroundColor = .lightGray
+            answerD.backgroundColor = .lightGray
+        } else if(sender.tag == 4){
+            answerD.backgroundColor = .blue
+            selectedAnswer = "D"
+            answerB.backgroundColor = .lightGray
+            answerC.backgroundColor = .lightGray
+            answerA.backgroundColor = .lightGray
+        }
+    }
 }
 extension QuizViewController: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
