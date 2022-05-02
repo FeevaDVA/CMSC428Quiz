@@ -85,6 +85,7 @@ class ViewController: UIViewController{
         if(segue.identifier == "quiz"){
             let vc = segue.destination as? QuizViewController
             vc?.session = session
+            vc?.multi = multi
         }
     }
 }

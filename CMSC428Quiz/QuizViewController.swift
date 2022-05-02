@@ -8,10 +8,82 @@
 import UIKit
 import MultipeerConnectivity
 
+struct Quiz:Decodable {
+    let numberOfQuestions: Int
+    let questions:[Questions]
+    let topic: String
+}
+
+struct Questions:Decodable{
+    let number: Int
+    let questionSentence: String
+    let options:Answers
+    let correctOption: String
+}
+
+struct Answers:Decodable{
+    let A: String
+    let B: String
+    let C: String
+    let D: String
+}
+
 class QuizViewController: UIViewController {
     var session:MCSession!
+    var multi:Int!
+    var players:Int!
+    var curQuiz:Quiz!
+    var curQ:Int = 0
+    
+    
+    @IBOutlet weak var answerA:UIButton!
+    @IBOutlet weak var answerB:UIButton!
+    @IBOutlet weak var answerC:UIButton!
+    @IBOutlet weak var answerD:UIButton!
+    
+    @IBOutlet weak var question:UILabel!
+    @IBOutlet weak var questionAmount:UILabel!
+    
+    @IBOutlet weak var points1:UILabel!
+    @IBOutlet weak var points2:UILabel!
+    @IBOutlet weak var points3:UILabel!
+    @IBOutlet weak var points4:UILabel!
+    
+    @IBOutlet weak var timer:UILabel!
+    @IBOutlet weak var restartButton:UIButton!
+    
     
     override func viewDidLoad() {
+        if(multi == 1){
+            session.delegate = self
+            players = session.connectedPeers.count
+        }
+        if let url = URL(string: "https://www.people.vcu.edu/~ebulut/jsonFiles/quiz1.json") {
+           URLSession.shared.dataTask(with: url) { data, response, error in
+              if let data = data {
+                 if let jsonString = String(data: data, encoding: .utf8) {
+                     self.parseJson(data: data)
+                     print(jsonString)
+                 }
+               }
+           }.resume()
+        }
+        
+        
+    }
+    
+    func parseJson(data:Data){
+        let quiz:Quiz = try! JSONDecoder().decode(Quiz.self, from: data)
+        curQuiz = quiz
+        curQ = 0
+        startQuiz()
+        print(quiz)
+    }
+    
+    func startQuiz(){
+        let q:Questions = curQuiz.questions[curQ]
+        
+        
         
     }
     
