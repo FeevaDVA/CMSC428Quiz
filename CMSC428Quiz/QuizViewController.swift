@@ -47,6 +47,8 @@ class QuizViewController: UIViewController {
     var imagePlayers:[UIImageView] = []
     var points:[UILabel] = []
     var quizNum:Int = 1
+    var answers:[UIButton] = []
+    var gestureSelection:Int = 0
     
     
     @IBOutlet weak var answerA:UIButton!
@@ -76,6 +78,11 @@ class QuizViewController: UIViewController {
         imagePlayers.append(player2)
         imagePlayers.append(player3)
         imagePlayers.append(player4)
+        
+        answers.append(answerA)
+        answers.append(answerB)
+        answers.append(answerC)
+        answers.append(answerD)
         
         player1.backgroundColor = .blue
         player2.backgroundColor = .lightGray
@@ -333,6 +340,7 @@ class QuizViewController: UIViewController {
         curQuiz = nil
         players = []
         points = []
+        answers = []
         imagePlayers = []
         viewDidLoad()
     }
@@ -361,6 +369,7 @@ extension QuizViewController: MCSessionDelegate {
                     self.restartButton.isHidden = true
                     self.players = []
                     self.points = []
+                    self.answers = []
                     self.imagePlayers = []
                     self.curQuiz = nil
                     self.viewDidLoad()

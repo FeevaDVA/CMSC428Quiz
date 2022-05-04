@@ -7,8 +7,6 @@
 		<string>_service._tcp</string>
 		<string>_service._udp</string>
 	</array>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string></string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
