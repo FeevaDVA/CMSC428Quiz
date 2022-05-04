@@ -45,6 +45,7 @@ class QuizViewController: UIViewController {
     var selectedAnswer:String = ""
     var players:[Player] = []
     var imagePlayers:[UIImageView] = []
+    var points:[UILabel] = []
     var quizNum:Int = 1
     
     
@@ -72,15 +73,31 @@ class QuizViewController: UIViewController {
     
     override func viewDidLoad() {
         imagePlayers.append(player1)
+        imagePlayers.append(player2)
+        imagePlayers.append(player3)
+        imagePlayers.append(player4)
+        
+        player1.backgroundColor = .blue
+        player2.backgroundColor = .lightGray
+        player3.backgroundColor = .lightGray
+        player4.backgroundColor = .lightGray
         //if multi add other players and stuff
+        points.append(points1)
+        points1.text = "0"
+        points.append(points2)
+        points2.text = "0"
+        points.append(points3)
+        points3.text = "0"
+        points.append(points4)
+        points4.text = "0"
+        
         if(multi == 1){
-            imagePlayers.append(player2)
-            imagePlayers.append(player3)
-            imagePlayers.append(player4)
-            
             session.delegate = self
+            let player = Player(peerID: session.myPeerID)
+            players.append(player)
             var i = 0
             while(i<session.connectedPeers.count){
+                print(session.connectedPeers.count)
                 let id = session.connectedPeers[i]
                 let p:Player = Player(peerID: id)
                 players.append(p)
@@ -132,6 +149,17 @@ class QuizViewController: UIViewController {
         
         selectedAnswer = ""
         
+        var i = 0
+        while(i<players.count){
+            imagePlayers[i].backgroundColor = .blue
+            i += 1
+        }
+        
+        answerA.isEnabled = true
+        answerB.isEnabled = true
+        answerC.isEnabled = true
+        answerD.isEnabled = true
+        
         answerA.backgroundColor = .lightGray
         answerB.backgroundColor = .lightGray
         answerC.backgroundColor = .lightGray
@@ -163,36 +191,59 @@ class QuizViewController: UIViewController {
     //the end of quiz function
     func endQuiz(){
         timer.invalidate()
+        
+        answerA.isEnabled = false
+        answerB.isEnabled = false
+        answerC.isEnabled = false
+        answerD.isEnabled = false
+        
         let q:Questions = curQuiz.questions[curQ - 1]
         var i = 0
         while(i<players.count){
             if(players[i].selectedAnswer == q.correctOption){
+                imagePlayers[i].backgroundColor = .green
                 players[i].points += 1
                 players[i].selectedAnswer = ""
+            } else {
+                imagePlayers[i].backgroundColor = .red
             }
             i += 1
         }
         print(q.correctOption)
         switch q.correctOption {
-            case "A": answerA.backgroundColor = .green
+            case "A":
+                answerA.backgroundColor = .green
             case "B": answerB.backgroundColor = .green
             case "C": answerC.backgroundColor = .green
             case "D": answerD.backgroundColor = .green
             default: print("")
         }
         quizNum += 1
+        print(quizNum)
+        restartButton.isEnabled = true
+        restartButton.isHidden = false
         print("quiz ended")
     }
     //point calculation function
     func calcPoints(){
         timer.invalidate()
+       
+        answerA.isEnabled = false
+        answerB.isEnabled = false
+        answerC.isEnabled = false
+        answerD.isEnabled = false
+        
         let q:Questions = curQuiz.questions[curQ - 1]
-        let time = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.getQuestion), userInfo: nil, repeats: false)
+        let time = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.getQuestion), userInfo: nil, repeats: false)
         var i = 0
         while(i<players.count){
             if(players[i].selectedAnswer == q.correctOption){
                 players[i].points += 1
+                points[i].text = String(players[i].points)
+                imagePlayers[i].backgroundColor = .green
                 players[i].selectedAnswer = ""
+            } else {
+                imagePlayers[i].backgroundColor = .red
             }
             i += 1
         }
@@ -210,28 +261,67 @@ class QuizViewController: UIViewController {
         if(sender.tag == 1){
             answerA.backgroundColor = .blue
             players[0].selectedAnswer = "A"
+            do {
+                let d = "A"
+                try session.send(d.data(using: String.Encoding.ascii, allowLossyConversion: true)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable)
+            } catch {
+                print("error")
+            }
             answerB.backgroundColor = .lightGray
             answerC.backgroundColor = .lightGray
             answerD.backgroundColor = .lightGray
         } else if(sender.tag == 2){
             answerB.backgroundColor = .blue
             players[0].selectedAnswer = "B"
+            do {
+                let d = "B"
+                try session.send(d.data(using: String.Encoding.ascii, allowLossyConversion: true)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable)
+            } catch {
+                print("error")
+            }
             answerA.backgroundColor = .lightGray
             answerC.backgroundColor = .lightGray
             answerD.backgroundColor = .lightGray
         } else if(sender.tag == 3){
             answerC.backgroundColor = .blue
             players[0].selectedAnswer = "C"
+            do {
+                let d = "C"
+                try session.send(d.data(using: String.Encoding.ascii, allowLossyConversion: true)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable)
+            } catch {
+                print("error")
+            }
             answerA.backgroundColor = .lightGray
             answerB.backgroundColor = .lightGray
             answerD.backgroundColor = .lightGray
         } else if(sender.tag == 4){
             answerD.backgroundColor = .blue
             players[0].selectedAnswer = "D"
+            do {
+                let d = "D"
+                try session.send(d.data(using: String.Encoding.ascii, allowLossyConversion: true)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable)
+            } catch {
+                print("error")
+            }
             answerB.backgroundColor = .lightGray
             answerC.backgroundColor = .lightGray
             answerA.backgroundColor = .lightGray
         }
+    }
+    @IBAction func restart(){
+        do {
+            let d = "restart"
+            try session.send(d.data(using: String.Encoding.ascii, allowLossyConversion: true)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable)
+        } catch {
+            print("error")
+        }
+        restartButton.isEnabled = false
+        restartButton.isHidden = true
+        curQuiz = nil
+        players = []
+        points = []
+        imagePlayers = []
+        viewDidLoad()
     }
 }
 //session delegate need to handle recieving data ie receiving selected answer
@@ -250,7 +340,28 @@ extension QuizViewController: MCSessionDelegate {
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-    
+        if let string = String(data: data, encoding: String.Encoding.ascii){
+            print(string)
+            if(string == "restart"){
+                DispatchQueue.main.async {
+                    self.restartButton.isEnabled = false
+                    self.restartButton.isHidden = true
+                    self.players = []
+                    self.points = []
+                    self.imagePlayers = []
+                    self.curQuiz = nil
+                    self.viewDidLoad()
+                }
+            } else {
+                var i = 0
+                while(i<players.count){
+                    if(players[i].peerID == peerID){
+                        players[i].selectedAnswer = string
+                    }
+                    i += 1
+                }
+            }
+        }
     }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}
