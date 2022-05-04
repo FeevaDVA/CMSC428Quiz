@@ -151,6 +151,7 @@ class QuizViewController: UIViewController {
         
         var i = 0
         while(i<players.count){
+            imagePlayers[i].image = nil
             imagePlayers[i].backgroundColor = .blue
             i += 1
         }
@@ -199,7 +200,11 @@ class QuizViewController: UIViewController {
         
         let q:Questions = curQuiz.questions[curQ - 1]
         var i = 0
+        var win = 0
         while(i<players.count){
+            if(players[win].points < players[i].points){
+                win = i
+            }
             if(players[i].selectedAnswer == q.correctOption){
                 imagePlayers[i].backgroundColor = .green
                 players[i].points += 1
@@ -208,6 +213,11 @@ class QuizViewController: UIViewController {
                 imagePlayers[i].backgroundColor = .red
             }
             i += 1
+        }
+        if(win == 0){
+            time.text = "You Win!"
+        } else {
+            time.text = "You Lose!"
         }
         print(q.correctOption)
         switch q.correctOption {
@@ -237,6 +247,9 @@ class QuizViewController: UIViewController {
         let time = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.getQuestion), userInfo: nil, repeats: false)
         var i = 0
         while(i<players.count){
+            if(players[i].selectedAnswer != ""){
+                imagePlayers[i].image = UIImage(named: players[i].selectedAnswer + ".png")
+            }
             if(players[i].selectedAnswer == q.correctOption){
                 players[i].points += 1
                 points[i].text = String(players[i].points)
