@@ -177,7 +177,7 @@ class QuizViewController: UIViewController {
         answerB.setTitle("B. " + q.options.B, for: .normal)
         answerC.setTitle("C. " + q.options.C, for: .normal)
         answerD.setTitle("D. " + q.options.D, for: .normal)
-        time.text = "30"
+        time.text = "20"
         
         curAnswer = q.correctOption
         question.text = q.questionSentence
